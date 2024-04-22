@@ -129,13 +129,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 if (updatePassController
                                     .updatePassFormKey!.currentState!
                                     .validate()) {
-                                  Get.off(() => CongratsMessage(
-                                        congratsMsg:
-                                            'Your Password has been Updated successfully',
-                                        onContinue: () =>
-                                            Get.offAllNamed(AppRoutes.login),
-                                        titleMsg: 'Password Update',
-                                      ));
+                                  // Get.off(() => CongratsMessage(
+                                  //       congratsMsg:
+                                  //           'Your Password has been Updated successfully',
+
+                                  //       titleMsg: 'Password Update',
+                                  //     ));
                                 }
                               }),
                         ),

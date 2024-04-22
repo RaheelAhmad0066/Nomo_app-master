@@ -12,12 +12,12 @@ import 'package:nomo_app/screens/splash-screen.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'AppRoutes/app-routes.dart';
+import 'Services/Prefferences/prefferences.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Services().initServices();
   // Initialize Firebase
   Firebase.initializeApp(options: DefaultFirebaseOptions.android);
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);

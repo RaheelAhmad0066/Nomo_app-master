@@ -89,7 +89,7 @@ class AppRoutes {
     ),
     GetPage(
       name: emailVerify,
-      page: () => const EmailVerificationScreen(
+      page: () => EmailVerificationScreen(
         pageType: 'changePass',
       ),
       transition: Transition.fadeIn,

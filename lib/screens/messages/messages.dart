@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:nomo_app/Services/Prefferences/prefferences.dart';
 import 'package:nomo_app/controllers/messages-tab-controller.dart';
 import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/search-field.dart';
-import 'package:nomo_app/screens/messages/chat-room-screen.dart';
+import 'package:nomo_app/screens/constant/constant.dart';
 import 'package:nomo_app/screens/messages/health-and-support-screen.dart';
 import '../../chat/api/apis.dart';
 import '../../chat/helper/dialogs.dart';
 import '../../chat/models/chat_user.dart';
-import '../../chat/pages/home_page.dart';
 import '../../chat/screens/home_screen.dart';
 import '../../chat/widgets/chat_user_card.dart';
 
@@ -44,8 +43,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
     //for updating user active status according to lifecycle events
     //resume -- active or online
     //pause  -- inactive or offline
+
     SystemChannels.lifecycle.setMessageHandler((message) {
-      if (APIs.auth.currentUser != null) {
+      if (APIs.user.uid != null) {
         if (message.toString().contains('resume')) {
           APIs.updateActiveStatus(true);
         }
@@ -290,15 +290,13 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 MaterialButton(
                     onPressed: () async {
                       //hide alert dialog
-                      Navigator.pop(context);
-                      if (email.isNotEmpty) {
-                        await APIs.addChatUser(email).then((value) {
-                          if (!value) {
-                            Dialogs.showSnackbar(
-                                context, 'User does not Exists!');
-                          }
-                        });
-                      }
+
+                      await APIs.addChatUser(email).then((value) {
+                        if (!value) {
+                          Dialogs.showSnackbar(
+                              context, 'User does not Exists!');
+                        }
+                      });
                     },
                     child: Text(
                       'Add',

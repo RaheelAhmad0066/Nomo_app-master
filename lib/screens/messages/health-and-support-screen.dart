@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:nomo_app/chat/api/apis.dart';
 import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../../chat/api/apis.dart';
 import '../../chat/screens/home_screen.dart';
 import '../../chat/service/database_service.dart';
 import '../../chat/widgets/group_tile.dart';

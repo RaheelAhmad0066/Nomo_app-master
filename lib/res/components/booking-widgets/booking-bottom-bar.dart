@@ -9,12 +9,14 @@ import 'package:nomo_app/res/components/buttons/elevated-button.dart';
 import 'package:nomo_app/screens/messages/chat-room-screen.dart';
 import 'package:nomo_app/screens/messages/messages.dart';
 
+import '../../../Services/Prefferences/prefferences.dart';
 import '../../../chat/models/chat_user.dart';
+import '../../../screens/constant/constant.dart';
 
 class BookingBottomBar extends StatelessWidget {
-  BookingBottomBar({super.key, this.user});
+  BookingBottomBar({super.key});
   final controller = Get.put(CallController());
-  final ChatUser? user;
+  // final ChatUser? user;
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +80,15 @@ class BookingBottomBar extends StatelessWidget {
                 flex: 0,
                 child: InkWell(
                   onTap: () {
-                    ChatUser? user;
-                    controller.sendCallButton(
-                        username: user!.name ?? '',
-                        isVideoCall: true,
-                        Userid: user!.id ?? '',
-                        onCallFinished: (code, message, p2) {
-                          controller.onSendCallInvitationFinished;
-                          controller.onUserLogin();
-                        });
+                    // ChatUser? user;
+                    // controller.sendCallButton(
+                    //     username: user!.name ?? '',
+                    //     isVideoCall: true,
+                    //     Userid: user!.id ?? '',
+                    //     onCallFinished: (code, message, p2) {
+                    //       controller.onSendCallInvitationFinished;
+                    //       controller.onUserLogin();
+                    //     });
                   },
                   child: Container(
                     height: 35.h,

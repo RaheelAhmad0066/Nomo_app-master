@@ -7,7 +7,14 @@ import 'package:nomo_app/res/components/text-field-widget.dart';
 import 'package:nomo_app/screens/auth/create-profile-emoji-screen.dart';
 
 class UsernamePickerScreen extends StatefulWidget {
-  const UsernamePickerScreen({super.key});
+  UsernamePickerScreen(
+      {super.key,
+      required this.email,
+      required this.name,
+      required this.password});
+  String name;
+  String email;
+  String password;
 
   @override
   State<UsernamePickerScreen> createState() => _UsernamePickerScreenState();
@@ -180,7 +187,12 @@ class _UsernamePickerScreenState extends State<UsernamePickerScreen> {
                     width: 280.w,
                     label: 'Continue',
                     onPressed: () {
-                      Get.to(() => const CreateProfileScreen());
+                      Get.to(() => CreateProfileScreen(
+                            name: widget.name,
+                            email: widget.email,
+                            password: widget.password,
+                            fullname: nameController.text.trim(),
+                          ));
                     }),
               ),
             ],

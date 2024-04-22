@@ -77,7 +77,7 @@ class _ChatSupportHomeState extends State<ChatSupportHome> {
   }
 
   // getGroupRecentMessageData(String groupId) async {
-  //   await DatabaseService(uid: APIs.user.uid)
+  //   await DatabaseService(uid: id)
   //       .getGroupRecentMessageData(groupId)
   //       .then((value) {
   //     setState(() {

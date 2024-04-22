@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:nomo_app/Services/AuthServices/Authservices.dart';
 import 'package:nomo_app/controllers/gender-controller.dart';
 import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
@@ -12,8 +14,18 @@ import 'package:nomo_app/screens/auth/signup-email-verify-screen.dart';
 
 class SelectGenderScreen extends StatefulWidget {
   final File imageFile;
+  String name;
+  String email;
+  String password;
+  String fullname;
 
-  const SelectGenderScreen({super.key, required this.imageFile});
+  SelectGenderScreen(
+      {super.key,
+      required this.imageFile,
+      required this.name,
+      required this.email,
+      required this.password,
+      required this.fullname});
 
   @override
   State<SelectGenderScreen> createState() => _SelectGenderScreenState();
@@ -22,7 +34,8 @@ class SelectGenderScreen extends StatefulWidget {
 class _SelectGenderScreenState extends State<SelectGenderScreen> {
   imgLib.Image? _image;
   String? selectedGender;
-
+  final authcontroller = Get.put(AuthServices());
+  String image = '';
   @override
   void initState() {
     super.initState();
@@ -31,8 +44,10 @@ class _SelectGenderScreenState extends State<SelectGenderScreen> {
 
   Future<void> _loadImage() async {
     final imageBytes = await widget.imageFile.readAsBytes();
+    String images = base64Encode(imageBytes);
     setState(() {
       _image = imgLib.decodeImage(imageBytes);
+      image = images;
     });
   }
 
@@ -51,9 +66,15 @@ class _SelectGenderScreenState extends State<SelectGenderScreen> {
         elevation: 0,
         actions: [
           InkWell(
-            onTap: () => Get.to(() => SelectGenderScreen(
-                  imageFile: File(''),
-                )),
+            onTap: () {
+              authcontroller.signUpService(
+                  fullName: widget.fullname,
+                  email: widget.email,
+                  password: widget.password,
+                  image: image,
+                  gender: controller.selectedGender.toString(),
+                  username: widget.name);
+            },
             child: const Padding(
               padding: EdgeInsets.only(top: 10, right: 25),
               child: Text(
@@ -97,90 +118,101 @@ class _SelectGenderScreenState extends State<SelectGenderScreen> {
           ),
           20.verticalSpace,
           Obx(() {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectGender('male');
-
-                      Get.to(() => const SignUpEmailVerifyScreen());
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+            return authcontroller.isLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(1.5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: controller.selectedGender.value == 'male'
-                                ? Border.all(color: AppColors.green, width: 4)
-                                : null,
+                        GestureDetector(
+                          onTap: () {
+                            controller.selectGender('male');
+                            authcontroller.signUpService(
+                                fullName: widget.fullname,
+                                email: widget.email,
+                                password: widget.password,
+                                image: image,
+                                gender: controller.selectedGender.toString(),
+                                username: widget.name);
+                            print(widget.email);
+                            print(widget.fullname);
+                            print(widget.password);
+                            print(controller.selectedGender);
+                            print(widget.name);
+                            print(widget.email);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(1.5),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      controller.selectedGender.value == 'male'
+                                          ? Border.all(
+                                              color: AppColors.green, width: 4)
+                                          : null,
+                                ),
+                                child: Image.asset(Assets.maleAvatar,
+                                    height: 125, width: 125),
+                              ),
+                              10.verticalSpace,
+                              const Text(
+                                'Male',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
-                          child: Image.asset(Assets.maleAvatar,
-                              height: 125, width: 125),
                         ),
-                        10.verticalSpace,
-                        const Text(
-                          'Male',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600),
+                        const SizedBox(width: 30),
+                        GestureDetector(
+                          onTap: () {
+                            authcontroller.signUpService(
+                                fullName: widget.fullname,
+                                email: widget.email,
+                                password: widget.password,
+                                image: image,
+                                gender: controller.selectedGender.toString(),
+                                username: widget.name);
+                            controller.selectGender('female');
+                            Get.to(() => SignUpEmailVerifyScreen(
+                                  email: widget.email,
+                                ));
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(1.5),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: controller.selectedGender.value ==
+                                          'female'
+                                      ? Border.all(
+                                          color: AppColors.green, width: 4)
+                                      : null,
+                                ),
+                                child: Image.asset(Assets.femaleAvatar,
+                                    height: 125, width: 125),
+                              ),
+                              10.verticalSpace,
+                              const Text(
+                                'Female',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 30),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectGender('female');
-                      Get.to(() => const SignUpEmailVerifyScreen());
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(1.5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: controller.selectedGender.value == 'female'
-                                ? Border.all(color: AppColors.green, width: 4)
-                                : null,
-                          ),
-                          child: Image.asset(Assets.femaleAvatar,
-                              height: 125, width: 125),
-                        ),
-                        10.verticalSpace,
-                        const Text(
-                          'Female',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
+                  );
           })
         ],
       ),
     );
   }
 }
-
-
-// InkWell(
-                //   onTap: () {
-                //     Get.to(() => CongratsMessage(
-                //           congratsMsg:
-                //               'Your Account has been created successfully',
-                //           onContinue: () => Get.offAllNamed(AppRoutes.login),
-                //         ));
-                //   },
-                //   child:
-                //       Image.asset(Assets.maleAvatar, height: 125, width: 125),
-                // ),
-                // 30.horizontalSpace,
-                // Image.asset(Assets.femaleAvatar, height: 125, width: 125),

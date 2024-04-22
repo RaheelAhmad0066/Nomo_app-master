@@ -1,17 +1,13 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
-
 import '../models/chat_user.dart';
-import '../pages/home_page.dart';
 import '../widgets/chat_user_card.dart';
 import 'chat_screen.dart';
 

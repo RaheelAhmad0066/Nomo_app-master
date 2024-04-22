@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:nomo_app/Services/Prefferences/prefferences.dart';
+import 'package:nomo_app/screens/constant/constant.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-
 import '../api/apis.dart';
 import 'Common.dart';
 
@@ -83,12 +85,14 @@ class CallController extends GetxController {
   /// on user login
   void onUserLogin() {
     callController ??= ZegoUIKitPrebuiltCallController();
+    // String username = Get.find<PrefUtils>().getStrings(PrefferKey.name) ?? '';
+    // int userid = Get.find<PrefUtils>().getUserId(PrefferKey.id);
 
     /// 4/5. initialized ZegoUIKitPrebuiltCallInvitationService when account is logged in or re-logged in
     ZegoUIKitPrebuiltCallInvitationService().init(
       appID: Mycall.appid /*input your AppID*/,
       appSign: Mycall.appsign /*input your AppSign*/,
-      userID: APIs.user.uid.toString(),
+      userID: APIs.user.uid,
       userName: APIs.user.displayName.toString(),
       // notifyWhenAppRunningInBackgroundOrQuit: false,
       notificationConfig: ZegoCallInvitationNotificationConfig(),

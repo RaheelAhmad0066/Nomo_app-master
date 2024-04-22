@@ -92,10 +92,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   Get.off(() => CongratsMessage(
                       congratsMsg:
                           'Your account setting has been\n Updated successfully',
-                      onContinue: () {
-                        Get.back();
-                        Get.back();
-                      },
                       titleMsg: 'Setting Update',
                       buttonText: 'Okay'));
                 }),
@@ -200,7 +196,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   label: 'Okay',
                   onPressed: () {
                     Get.back();
-                    Get.to(() => const EmailVerificationScreen(
+                    Get.to(() => EmailVerificationScreen(
                           pageType: 'updatePass',
                         ));
                   },

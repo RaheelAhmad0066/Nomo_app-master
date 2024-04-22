@@ -10,9 +10,11 @@ import 'package:nomo_app/res/components/contact-fields.dart';
 import 'package:nomo_app/res/components/dialogs/dialogs.dart';
 import 'package:nomo_app/res/components/gradient-app-bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Services/Prefferences/prefferences.dart';
 import '../chat/api/apis.dart';
 import '../chat/service/database_service.dart';
 import '../chat/widgets/widgets.dart';
+import 'constant/constant.dart';
 
 class ContactUsScreen extends StatefulWidget {
   String username;

@@ -1,13 +1,13 @@
 import 'dart:developer';
+
 import 'package:video_player/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../res/colors/appcolors.dart';
-import '../../res/components/messages/message-field.dart';
+
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
 import '../helper/my_date_util.dart';
@@ -47,7 +47,6 @@ class _MessageCardState extends State<MessageCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //message content
         Flexible(
           child: Container(
             padding: EdgeInsets.all(widget.message.type == Type.image
@@ -60,56 +59,34 @@ class _MessageCardState extends State<MessageCard> {
                 border:
                     Border.all(color: AppColors.neutralGray.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: widget.message.type == Type.text
-                      ?
-                      //show text
-                      Text(
-                          widget.message.msg,
-                          style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        )
-                      : widget.message.type == Type.image
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: CachedNetworkImage(
-                                imageUrl: widget.message.msg,
-                                placeholder: (context, url) => const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.image, size: 70),
-                              ),
-                            )
-                          : widget.message.type == Type.video
-                              ? VideoPlayerWidget(videoUrl: widget.message.msg)
-                              : Container(
-                                  child: Text('data'),
-                                ),
-                ),
-                //message time
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: mq.width * .04),
-                    child: Text(
-                      MyDateUtil.getFormattedTime(
-                          context: context, time: widget.message.sent),
-                      style:
-                          const TextStyle(fontSize: 13, color: Colors.black54),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: widget.message.type == Type.text
+                ?
+                //show text
+                Text(
+                    widget.message.msg,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  )
+                : widget.message.type == Type.image
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.message.msg,
+                          placeholder: (context, url) => const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.image, size: 70),
+                        ),
+                      )
+                    : widget.message.type == Type.video
+                        ? VideoPlayerWidget(videoUrl: widget.message.msg)
+                        : Container(
+                            child: Text('data'),
+                          ),
           ),
         ),
       ],

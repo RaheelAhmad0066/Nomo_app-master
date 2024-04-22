@@ -15,8 +15,17 @@ import 'package:nomo_app/screens/storyScreen/view-camera-image-screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CreateWithCameraScreen extends StatefulWidget {
-  const CreateWithCameraScreen({super.key});
-
+  CreateWithCameraScreen(
+      {Key? key,
+      required this.email,
+      required this.name,
+      required this.password,
+      required this.fullname})
+      : super(key: key);
+  String name;
+  String email;
+  String password;
+  String fullname;
   @override
   // ignore: library_private_types_in_public_api
   _CreateWithCameraScreenState createState() => _CreateWithCameraScreenState();
@@ -78,12 +87,6 @@ class _CreateWithCameraScreenState extends State<CreateWithCameraScreen>
       }
     }
   }
-  // void _swapCamera() {
-  //   if (_cameras != null && _cameras!.length > 1) {
-  //     _currentCameraIndex = _currentCameraIndex == 0 ? 1 : 0;
-  //     _initializeCamera(_currentCameraIndex);
-  //   }
-  // }
 
   Future<String> takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
@@ -157,7 +160,13 @@ class _CreateWithCameraScreenState extends State<CreateWithCameraScreen>
 
   void _navigateToNextScreen(CroppedFile croppedFile) {
     final imageFile = File(croppedFile.path);
-    Get.to(() => SelectGenderScreen(imageFile: imageFile));
+    Get.to(() => SelectGenderScreen(
+          imageFile: imageFile,
+          name: widget.name,
+          fullname: widget.fullname,
+          email: widget.email,
+          password: widget.password,
+        ));
   }
 
   @override

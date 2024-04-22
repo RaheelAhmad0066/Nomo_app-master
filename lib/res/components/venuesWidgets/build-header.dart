@@ -129,7 +129,7 @@ class _VenueHeaderWidgetState extends State<VenueHeaderWidget> {
                           ),
                         ),
                         onPressed: () {
-                          Get.to(() => const VenueDetailScreen());
+                          Get.to(() => VenueDetailScreen());
                         },
                         child: FittedBox(
                           fit: BoxFit.scaleDown,

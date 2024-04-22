@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:nomo_app/Services/Prefferences/prefferences.dart';
+import 'package:nomo_app/screens/constant/constant.dart';
 import '../api/apis.dart';
 import '../service/database_service.dart';
 import '../widgets/widgets.dart';
-import 'home_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username;
@@ -244,8 +243,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  int id = Get.find<PrefUtils>().getUserId(PrefferKey.id);
   updateDp() async {
-    await DatabaseService(uid: APIs.user.uid).updateUserDp(imagePath).then(
+    await DatabaseService(uid: id.toString()).updateUserDp(imagePath).then(
         (value) {
       print(value);
       showSnackbar(context, Colors.green, "Successfully updated!");

@@ -7,7 +7,11 @@ import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/buttons/elevated-button.dart';
 import 'package:nomo_app/screens/auth/email-verification-screen.dart';
+import 'package:nomo_app/screens/auth/login-screen.dart';
 import 'package:nomo_app/screens/storyScreen/story-page-view.dart';
+
+import '../../../Services/Prefferences/prefferences.dart';
+import '../../../screens/constant/constant.dart';
 
 void showLocationDetails(BuildContext context) {
   showDialog(
@@ -236,7 +240,7 @@ Widget deleteDialog() {
   );
 }
 
-Widget emailVerifyDialog() {
+Widget emailVerifyDialog(String email) {
   return Dialog(
     backgroundColor: AppColors.white,
     child: Container(
@@ -274,9 +278,7 @@ Widget emailVerifyDialog() {
                 label: 'Okay',
                 onPressed: () {
                   Get.back();
-                  Get.to(() => const EmailVerificationScreen(
-                        pageType: 'changePass',
-                      ));
+                  Get.to(LoginScreen());
                 },
                 width: double.infinity),
             const SizedBox(height: 25),
@@ -325,6 +327,7 @@ Widget logoutDialog() {
                   label: 'Yes',
                   onPressed: () {
                     Get.back();
+                    Get.find<PrefUtils>().logOut();
                   },
                   width: double.infinity),
             ),

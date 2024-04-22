@@ -15,8 +15,17 @@ import 'package:nomo_app/screens/auth/create-with-camera-screen.dart';
 import 'package:nomo_app/screens/auth/select-gender-screen.dart';
 
 class CreateProfileScreen extends StatelessWidget {
-  const CreateProfileScreen({Key? key}) : super(key: key);
-
+  CreateProfileScreen(
+      {Key? key,
+      required this.email,
+      required this.name,
+      required this.password,
+      required this.fullname})
+      : super(key: key);
+  String name;
+  String email;
+  String password;
+  String fullname;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +40,10 @@ class CreateProfileScreen extends StatelessWidget {
           InkWell(
             onTap: () => Get.to(() => SelectGenderScreen(
                   imageFile: File(''),
+                  name: name,
+                  email: email,
+                  password: password,
+                  fullname: fullname,
                 )),
             child: const Padding(
               padding: EdgeInsets.only(top: 20, right: 25),
@@ -49,7 +62,13 @@ class CreateProfileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () => Get.to(() => const CreateWithCameraScreen(),
+                onTap: () => Get.to(
+                    () => CreateWithCameraScreen(
+                          name: name,
+                          email: email,
+                          password: password,
+                          fullname: fullname,
+                        ),
                     transition: Transition.fadeIn,
                     duration: const Duration(milliseconds: 400)),
                 child: SvgPicture.asset(
@@ -82,7 +101,13 @@ class CreateProfileScreen extends StatelessWidget {
                       gradient: AppColors.gradientColor,
                       label: 'Continue',
                       onPressed: () {
-                        Get.to(() => const CreateWithCameraScreen(),
+                        Get.to(
+                            () => CreateWithCameraScreen(
+                                  name: name,
+                                  email: email,
+                                  password: password,
+                                  fullname: fullname,
+                                ),
                             transition: Transition.fadeIn,
                             duration: const Duration(milliseconds: 400));
                       },

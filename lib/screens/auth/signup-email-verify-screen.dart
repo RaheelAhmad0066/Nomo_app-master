@@ -2,23 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:nomo_app/AppRoutes/app-routes.dart';
+import 'package:nomo_app/Services/Prefferences/prefferences.dart';
 import 'package:nomo_app/res/components/buttons/elevated-button.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/congrats-widget.dart';
 import 'package:nomo_app/res/themetext/theme-text.dart';
+import 'package:nomo_app/screens/constant/constant.dart';
+
+import '../../Services/AuthServices/Authservices.dart';
 
 class SignUpEmailVerifyScreen extends StatefulWidget {
-  const SignUpEmailVerifyScreen({
+  SignUpEmailVerifyScreen({
     super.key,
+    required this.email,
   });
-
+  String email;
   @override
   State<SignUpEmailVerifyScreen> createState() =>
       _SignUpEmailVerifyScreenState();
 }
 
 class _SignUpEmailVerifyScreenState extends State<SignUpEmailVerifyScreen> {
+  final otpController = TextEditingController();
+  final control = Get.put(AuthServices());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +56,7 @@ class _SignUpEmailVerifyScreenState extends State<SignUpEmailVerifyScreen> {
                       fontFamily: montserrat,
                     )),
                 10.verticalSpace,
-                const Text('johndoe@gmail.com',
+                Text(widget.email,
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.blackColor,
@@ -59,6 +66,7 @@ class _SignUpEmailVerifyScreenState extends State<SignUpEmailVerifyScreen> {
                 20.verticalSpace,
                 PinCodeFields(
                   length: 4,
+                  controller: otpController,
                   fieldBorderStyle: FieldBorderStyle.square,
                   responsive: false,
                   fieldHeight: 40.h,
@@ -108,21 +116,31 @@ class _SignUpEmailVerifyScreenState extends State<SignUpEmailVerifyScreen> {
                   ],
                 ),
                 45.verticalSpace,
-                Align(
-                  alignment: Alignment.center,
-                  child: GradientElevatedButton(
-                      gradient: AppColors.gradientColor,
-                      width: 280.w,
-                      label: 'Submit',
-                      onPressed: () {
-                        Get.to(() => CongratsMessage(
-                              congratsMsg:
-                                  'Your Account has been created successfully',
-                              onContinue: () =>
-                                  Get.offAllNamed(AppRoutes.login),
-                              titleMsg: 'Congratulations!',
-                            ));
-                      }),
+                Obx(
+                  () => control.isLoading.value
+                      ? Center(child: CircularProgressIndicator())
+                      : Align(
+                          alignment: Alignment.center,
+                          child: GradientElevatedButton(
+                              gradient: AppColors.gradientColor,
+                              width: 280.w,
+                              label: 'Sllubmit',
+                              onPressed: () {
+                                String useremail = Get.find<PrefUtils>()
+                                    .getStrings(PrefferKey.email);
+                                control
+                                    .verifySignUpOTPService(
+                                        otp: otpController.text,
+                                        email: useremail)
+                                    .then(
+                                        (value) => Get.to(() => CongratsMessage(
+                                              congratsMsg:
+                                                  'Your Account has been created successfully',
+                                              titleMsg: 'Congratulations!',
+                                            )));
+                                ;
+                              }),
+                        ),
                 ),
               ],
             ),

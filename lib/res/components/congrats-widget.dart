@@ -2,24 +2,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/buttons/elevated-button.dart';
+import 'package:nomo_app/screens/auth/login-screen.dart';
 
 // ignore: must_be_immutable
 class CongratsMessage extends StatelessWidget {
   CongratsMessage({
     super.key,
     required this.congratsMsg,
-    required this.onContinue,
     required this.titleMsg,
     this.buttonText = 'Continue to Sign In',
   });
-
   String? congratsMsg;
   String? titleMsg;
   String? buttonText;
-  VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +60,9 @@ class CongratsMessage extends StatelessWidget {
             child: GradientElevatedButton(
                 gradient: AppColors.gradientColor,
                 label: buttonText!,
-                onPressed: onContinue,
+                onPressed: () {
+                  Get.to(LoginScreen());
+                },
                 width: 200.w),
           ),
         ],

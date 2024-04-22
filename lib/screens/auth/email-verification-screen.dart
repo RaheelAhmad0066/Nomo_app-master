@@ -8,9 +8,13 @@ import 'package:nomo_app/res/themetext/theme-text.dart';
 import 'package:nomo_app/screens/auth/change-pass-screen.dart';
 import 'package:nomo_app/screens/auth/update-pass-screen.dart';
 
+import '../../Services/AuthServices/Authservices.dart';
+
 class EmailVerificationScreen extends StatefulWidget {
   final String pageType;
-  const EmailVerificationScreen({super.key, required this.pageType});
+  String? forgetEmail;
+  EmailVerificationScreen(
+      {super.key, required this.pageType, this.forgetEmail});
 
   @override
   State<EmailVerificationScreen> createState() =>
@@ -18,6 +22,8 @@ class EmailVerificationScreen extends StatefulWidget {
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+  final Otpcontroller = TextEditingController();
+  final controller = Get.put(AuthServices());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +64,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 20.verticalSpace,
                 PinCodeFields(
                   length: 4,
+                  controller: Otpcontroller,
                   fieldBorderStyle: FieldBorderStyle.square,
                   responsive: false,
                   fieldHeight: 40.h,
@@ -114,15 +121,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       width: 280.w,
                       label: 'Submit',
                       onPressed: () {
-                        if (widget.pageType == 'changePass') {
-                          Get.to(
-                            () => const ChangePasswordScreen(),
-                          );
-                        } else if (widget.pageType == 'updatePass') {
-                          Get.to(
-                            () => const UpdatePasswordScreen(),
-                          );
-                        }
+                        controller.verifyUserOTPService(
+                            otp: Otpcontroller.text);
                       }),
                 ),
               ],

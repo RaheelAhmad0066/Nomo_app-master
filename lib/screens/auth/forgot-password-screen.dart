@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:nomo_app/Services/AuthServices/Authservices.dart';
 import 'package:nomo_app/res/components/buttons/elevated-button.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/dialogs/dialogs.dart';
@@ -35,6 +37,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return regex.hasMatch(email);
   }
 
+  final authController = Get.put(AuthServices());
+  final emailcont = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     )),
                 25.verticalSpace,
                 CustomTextFieldWidget(
-                  controller: emailController,
+                  controller: emailcont,
                   label: 'Email Address',
                   hintText: 'Please enter your email address',
                   errorText: emailErrorText,
@@ -151,20 +155,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         fontFamily: 'Montserrat',
                       )),
                 55.verticalSpace,
-                Align(
-                  alignment: Alignment.center,
-                  child: GradientElevatedButton(
-                      gradient: AppColors.gradientColor,
-                      width: double.infinity,
-                      label: 'Continue',
-                      onPressed: () {
-                        // Get.offAllNamed(AppRoutes.emailVerify);
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return emailVerifyDialog();
-                            });
-                      }),
+                Obx(
+                  () => authController.isLoading.value
+                      ? Center(child: CircularProgressIndicator())
+                      : Align(
+                          alignment: Alignment.center,
+                          child: GradientElevatedButton(
+                              gradient: AppColors.gradientColor,
+                              width: double.infinity,
+                              label: 'Continue',
+                              onPressed: () {
+                                authController
+                                    .forgotPasswordService(emailcont.text)
+                                    .then((value) => showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return emailVerifyDialog(
+                                              emailcont.text);
+                                        }));
+                              }),
+                        ),
                 ),
               ],
             ),
