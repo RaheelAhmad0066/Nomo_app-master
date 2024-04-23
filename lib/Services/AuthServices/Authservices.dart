@@ -147,6 +147,86 @@ class AuthServices extends GetxController {
     }
   }
 
+  void updateUser(
+      {String? fullName,
+      String? username,
+      String? phonenumber,
+      String? gender}) async {
+    try {
+      isLoading.value = true;
+      Map<String, dynamic> data = {
+        'fullName': fullName,
+        "username": username,
+        "status": 1,
+        "gender": gender,
+      };
+      String token = Get.find<PrefUtils>().getToken(PrefferKey.token) ?? '';
+      final response = await http.post(
+        Uri.parse(APIEndpoints.updateUser),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authoriziation': 'Bearer $token'
+        },
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody = jsonDecode(response.body);
+        UserModel responseModel = UserModel.fromMap(responseBody);
+        if (responseModel.status == true) {
+          Get.snackbar('Success', responseModel.message.toString());
+        } else {
+          Get.snackbar(
+            'Error',
+            responseModel.message.toString(),
+            snackPosition: SnackPosition.TOP,
+            duration: Duration(seconds: 3),
+          );
+        }
+      }
+    } catch (e) {
+      log('Error: $e');
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+// void getUserProfile() async {
+//     try {
+//       isLoading.value = true;
+
+//     String token=  Get.find<PrefUtils>().getToken(PrefferKey.token)??'';
+//       final response = await http.get(
+//         Uri.parse(APIEndpoints.getUserProfile),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authoriziation': 'Bearer $token'
+//         },
+//         body: jsonEncode(data),
+//       );
+//       if (response.statusCode == 200) {
+//         Map<String, dynamic> responseBody = jsonDecode(response.body);
+//         UserModel responseModel = UserModel.fromMap(responseBody);
+//         if (responseModel.status == true) {
+
+//           Get.snackbar('Success', responseModel.message.toString());
+//         } else {
+//           Get.snackbar(
+//             'Error',
+//             responseModel.message.toString(),
+//             snackPosition: SnackPosition.TOP,
+//             duration: Duration(seconds: 3),
+//           );
+//         }
+//       }
+//     } catch (e) {
+//       log('Error: $e');
+//       Get.snackbar('Error', e.toString());
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+
   Future<void> verifySignUpOTPService({String? otp, String? email}) async {
     try {
       isLoading.value = true;

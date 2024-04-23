@@ -47,9 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
     Dialogs.showProgressBar(context);
     _signInWithGoogle().then((user) async {
       Navigator.pop(context);
-      if (user != null) {
-        log('\nUser: ${user.user}');
-        log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
+      if (APIs.user.uid != null) {
+        log('\nUser: ${APIs.user.uid}');
+        log('\nUserAdditionalInfo: ${APIs.user}');
         if ((await APIs.userExists())) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (_) => const CustomBottomScreen()));
