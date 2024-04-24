@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import 'package:nomo_app/res/components/dialogs/dialogs.dart';
@@ -173,6 +175,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           builder: (_) {
                             return logoutDialog();
                           });
+
+                      _signOut() async {
+                        await FirebaseAuth.instance.signOut();
+                        await GoogleSignIn().signOut();
+                      }
                     },
                     child: const Text(
                       'Logout',

@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +11,6 @@ import 'package:nomo_app/res/assets/assets.dart';
 import 'package:nomo_app/res/colors/appcolors.dart';
 import '../../AppRoutes/app-routes.dart';
 import '../../Services/AuthServices/Authservices.dart';
-import '../../chat/api/apis.dart';
 import '../../chat/helper/dialogs.dart';
 import '../custom-navBar-screen.dart';
 import '../instagram_view.dart';
@@ -27,65 +23,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _isAnimate = false;
   final controller = Get.put(AuthServices());
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-
-    //for auto triggering animation
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() => _isAnimate = true);
-    });
-  }
-
-  // handles google login button click
-  _handleGoogleBtnClick() {
-    //for showing progress bar
+  Future<void> signInWithGoogle(BuildContext context) async {
     Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((user) async {
-      Navigator.pop(context);
-      if (APIs.user.uid != null) {
-        log('\nUser: ${APIs.user.uid}');
-        log('\nUserAdditionalInfo: ${APIs.user}');
-        if ((await APIs.userExists())) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (_) => const CustomBottomScreen()));
-          // saving the values to our shared preferences
-        } else {
-          await APIs.createUser().then((value) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => const CustomBottomScreen()));
-          });
-        }
-      }
-    });
-  }
-
-  Future<UserCredential?> _signInWithGoogle() async {
-    try {
-      await InternetAddress.lookup('google.com');
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    final GoogleSignInAccount? googleSignInAccount =
+        await GoogleSignIn().signIn();
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
       );
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
 
-      // Once signed in, return the UserCredential
-      return await APIs.auth.signInWithCredential(credential);
-    } catch (e) {
-      log('\n_signInWithGoogle: $e');
-      Dialogs.showSnackbar(context, 'Something Went Wrong (Check Internet!)');
-      return null;
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CustomBottomScreen()),
+        );
+      }
     }
   }
 
@@ -127,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Expanded(
                         child: SocialMediaButton(
                       onTap: () {
-                        _handleGoogleBtnClick();
+                        signInWithGoogle(context);
                       },
                       buttonIcon: Assets.google,
                       buttonText: 'Google',

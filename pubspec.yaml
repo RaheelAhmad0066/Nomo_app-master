@@ -94,8 +94,10 @@ dependencies:
   flutter_local_notifications: ^17.0.1
   flutter_webview_plugin: ^0.4.0
   audio_waveforms: ^1.0.5
-
-
+  connectivity: ^3.0.6
+  record_mp3: ^3.0.0
+  
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
